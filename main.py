@@ -45,10 +45,19 @@ def pad(x,y):
     return x,y
 
 def quadratic_multiply(x, y):
-    ### TODO
-    pass
-    ###
+    return _quadratic_multiply(x, y)
 
+def _quadratic_multiply(x, y):
+    xvec, yvec = pad(x.binary_vec, y.binary_vec)
+    if (x.decimal_val & y.decimal_val <= 1):
+        return BinaryNumber(x.decimal_val * y.decimal_val)
+    else:
+        x_left, x_right = split_number(xvec)
+        y_left, y_right = split_number(yvec)
+        val1 = bit_shift(_quadratic_multiply(x_left, y_left), len(xvec))
+        val2 = bit_shift((BinaryNumber((_quadratic_multiply(x_left, y_right)).decimal_val + (_quadratic_multiply(x_right,y_left)).decimal_val)),len(xvec)//2) 
+        val3 = _quadratic_multiply(x_right, y_right)
+        return val1.decimal_val + val2.decimal_val + val3.decimal_val
 
 
 ## Feel free to add your own tests here.
